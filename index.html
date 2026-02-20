@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>plows537.dev</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: oklch(0.1 0 80);
+            --bg: oklch(0.15 0 80);
+            --bg-light: oklch(0.2 0 80);
+            --text: oklch(0.96 0 80);
+            --text-muted: oklch(0.76 0 80);
+            --highlight: oklch(0.5 0 80);
+            --border: oklch(0.4 0 80);
+            --border-muted: oklch(0.3 0 80);
+            --primary: oklch(0.76 0.1 80);
+            --secondary: oklch(0.76 0.1 260);
+            --danger: oklch(0.7 0.05 30);
+            --warning: oklch(0.7 0.05 100);
+            --success: oklch(0.7 0.05 160);
+            --info: oklch(0.7 0.05 260);
+        }
+
+        body.light-mode {
+            --bg-dark: oklch(0.95 0 80);
+            --bg: oklch(0.9 0 80);
+            --bg-light: oklch(0.85 0 80);
+            --text: oklch(0.1 0 80);
+            --text-muted: oklch(0.3 0 80);
+            --highlight: oklch(0.75 0 80);
+            --border: oklch(0.6 0 80);
+            --border-muted: oklch(0.7 0 80);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            padding: 1.25rem;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover { transform: scale(1.1); opacity: 0.85; }
+        .theme-icon { width: 1.5rem; height: 1.5rem; }
+
+        /* ── HERO ── */
+        .hero {
+            max-width: 52rem;
+            margin: 4rem auto 0;
+            padding: 0 1.5rem;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .hero-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--primary);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            color: var(--text);
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .hero-bio {
+            margin-top: 1.25rem;
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 38rem;
+            font-weight: 300;
+        }
+
+
+
+        /* ── DIVIDER ── */
+        .section-divider {
+            max-width: 52rem;
+            margin: 3rem auto 0;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: fadeUp 0.5s 0.1s ease both;
+        }
+
+        .section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border-muted);
+        }
+
+        /* ── PROJECTS GRID ── */
+        .projects {
+            max-width: 52rem;
+            margin: 1.5rem auto 0;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+            gap: 1rem;
+            animation: fadeUp 0.5s 0.15s ease both;
+        }
+
+        .card {
+            border: 1px solid var(--border-muted);
+            border-radius: 0.625rem;
+            background: var(--bg);
+            padding: 1.375rem;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 0.625rem;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.25s;
+            border-radius: inherit;
+        }
+
+        .card:hover {
+            border-color: var(--border);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px oklch(0 0 0 / 0.3);
+        }
+
+        .card:hover::before { opacity: 0.07; }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .card-icon {
+            font-size: 1.25rem;
+            line-height: 1;
+        }
+
+        .card-arrow {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .card:hover .card-arrow {
+            transform: translate(2px, -2px);
+            color: var(--primary);
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+
+        .card-desc {
+            font-size: 0.825rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+            font-weight: 300;
+            flex: 1;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem;
+            margin-top: 0.25rem;
+        }
+
+        .tag {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            background: var(--bg-light);
+            border: 1px solid var(--border-muted);
+            border-radius: 0.25rem;
+            padding: 0.15rem 0.5rem;
+            letter-spacing: 0.03em;
+        }
+
+        /* ── STACK SECTION ── */
+        .stack-section {
+            max-width: 52rem;
+            margin: 3rem auto 0;
+            padding: 0 1.5rem;
+            animation: fadeUp 0.5s 0.25s ease both;
+        }
+
+        .stack-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.25rem;
+        }
+
+        .stack-item {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            border: 1px solid var(--border-muted);
+            background: var(--bg);
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.3125rem;
+            transition: all 0.2s;
+        }
+
+        .stack-item:hover {
+            color: var(--text);
+            border-color: var(--primary);
+            background: var(--bg-light);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            max-width: 52rem;
+            margin: 4rem auto 0;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeUp 0.5s 0.35s ease both;
+        }
+
+        footer p {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        footer p:last-child {
+            opacity: 0.6;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover { text-decoration: underline; }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+            .projects { grid-template-columns: 1fr; }
+            footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+            <svg class="theme-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+                <path d="M565-395q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35Zm-226.5 56.5Q280-397 280-480t58.5-141.5Q397-680 480-680t141.5 58.5Q680-563 680-480t-58.5 141.5Q563-280 480-280t-141.5-58.5ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Zm326-268Z"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero">
+        <p class="hero-eyebrow"></p>
+        <h1>Hey, I'm <span>plows537</span></h1>
+        <p class="hero-bio">
+            I build things for the web. Here's a collection of projects I've worked on —
+            from small utilities to full applications.
+        </p>
+
+    </section>
+
+    <!-- PROJECTS -->
+    <div class="section-divider">
+        <span class="section-label">projects</span>
+        <div class="section-line"></div>
+    </div>
+
+    <div class="projects">
+
+        
+        <a class="card" href="https://plows537.github.io/timer" target="_blank">
+            <div class="card-top">
+                <span class="card-icon">⏱</span>
+                <span class="card-arrow">↗</span>
+            </div>
+            <div class="card-title">Timer</div>
+            <div class="card-desc">A clean multi-mode time utility — stopwatch, countdown, and live clock all in one. Minimal interface, no distractions.</div>
+            <div class="card-tags">
+                <span class="tag">HTML</span>
+                <span class="tag">CSS</span>
+                <span class="tag">JS</span>
+            </div>
+        </a>
+
+        <a class="card" href="https://plows537.github.io/points" target="_blank">
+            <div class="card-top">
+                <span class="card-icon">🎯</span>
+                <span class="card-arrow">↗</span>
+            </div>
+            <div class="card-title">Point Tracker</div>
+            <div class="card-desc">Track scores across players or teams in real time. Great for board games, sports, or any friendly competition.</div>
+            <div class="card-tags">
+                <span class="tag">HTML</span>
+                <span class="tag">CSS</span>
+                <span class="tag">JS</span>
+            </div>
+        </a>
+
+        <a class="card" href="https://plows537.github.io/prayer_times" target="_blank">
+            <div class="card-top">
+                <span class="card-icon">🌙</span>
+                <span class="card-arrow">↗</span>
+            </div>
+            <div class="card-title">Prayer Times</div>
+            <div class="card-desc">Displays daily prayer times based on your location. Calculates Fajr, Dhuhr, Asr, Maghrib, and Isha automatically.</div>
+            <div class="card-tags">
+                <span class="tag">HTML</HTMl:5></span>
+                <span class="tag">CSS</span>
+                <span class="tag">JS</span>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- STACK -->
+    <div class="section-divider" style="margin-top:3rem;">
+        <span class="section-label">stack</span>
+        <div class="section-line"></div>
+    </div>
+
+    <section class="stack-section">
+        <div class="stack-grid">
+            <span class="stack-item">HTML / CSS</span>
+            <span class="stack-item">JavaScript</span>
+            <span class="stack-item">Java</span>
+            <span class="stack-item">Python</span>
+            <span class="stack-item">Godot</span>
+            <span class="stack-item">Linux</span>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 <a href="https://github.com/plows537">plows537</a></p>
+        <p>built with HTML · CSS · JS</p>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById("themeToggle");
+        const body = document.body;
+
+        // Read saved preference, fall back to dark
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        let isDarkMode = savedTheme !== "light";
+        applyTheme();
+
+        themeToggle.addEventListener("click", () => {
+            isDarkMode = !isDarkMode;
+            localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+            applyTheme();
+        });
+
+        function applyTheme() {
+            const svg = themeToggle.querySelector('.theme-icon');
+            if (isDarkMode) {
+                body.classList.remove("light-mode");
+                svg.innerHTML = '<path d="M565-395q35-35 35-85t-35-85q-35-35-85-35t-85 35q-35 35-35 85t35 85q35 35 85 35t85-35Zm-226.5 56.5Q280-397 280-480t58.5-141.5Q397-680 480-680t141.5 58.5Q680-563 680-480t-58.5 141.5Q563-280 480-280t-141.5-58.5ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Zm326-268Z"/>';
+            } else {
+                body.classList.add("light-mode");
+                svg.innerHTML = '<path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z"/>';
+            }
+        }
+    </script>
+</body>
+</html>
